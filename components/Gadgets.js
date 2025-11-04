@@ -47,7 +47,7 @@ function Gadgets() {
           ...scrollTriggerConfig,
           trigger: leftRef.current,
           start: "top 50%",
-          markers: true,
+          markers: false,
         },
       });
 

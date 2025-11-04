@@ -39,7 +39,7 @@ function HomeCard() {
         trigger: card,
         start: "top 50%",
         scrub: true,
-        markers: true,
+        markers: false,
         onUpdate: (self) => {
         
           if (self.progress > 0.05) {

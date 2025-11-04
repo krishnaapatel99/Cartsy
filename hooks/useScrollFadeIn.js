@@ -33,7 +33,7 @@ export default function useScrollFadeIn(ref, options = {}) {
             trigger: ref.current,
             start: options.start || "top 80%",
             stagger: options.stagger || false,
-            markers: true,
+            markers: false,
           },
         }
       );
