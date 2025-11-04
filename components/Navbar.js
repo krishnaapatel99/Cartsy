@@ -34,7 +34,7 @@ export default function Navbar() {
       navigator.geolocation.getCurrentPosition(async (position) => {
         const { latitude, longitude } = position.coords;
         try {
-          // Reverse geocode to get city and region using OpenStreetMap
+       
           const res = await fetch(
              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&accept-language=en`
           );
@@ -71,7 +71,7 @@ export default function Navbar() {
       });
     };
 
-    // Register listener
+   
     window.addEventListener("navbarReveal", animateNavbar, { once: true });
 
   
