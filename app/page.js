@@ -1,103 +1,234 @@
+"use client";
 import Image from "next/image";
+import { useLayoutEffect, useRef, useEffect } from "react";
+import SmoothScroll from "@/lib/SmoothScroll";
+import Navbar from "@/components/Navbar";
+import { useImageTrail } from "@/lib/useImageTrail";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Landingimages from "@/components/Landingimages";
+import Scrollingtext from "@/components/Scrollingtext";
+import HomeCard from "@/components/HomeCard";
+import Gadgets from "@/components/Gadgets";
+import { IoIosArrowDroprightCircle } from "react-icons/io";
+import DealsCards from "@/components/DealsCard";
+import Footer from "@/components/Footer";
+import useScrollFadeIn from "@/hooks/useScrollFadeIn";
+import { textReveal } from "@/hooks/useTextReveal";
+import TwoStageLoader from "@/components/TwoStageLoader";
+
+if (typeof window !== "undefined" && !gsap.core.globals().ScrollTrigger) {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+function ImageTrailContainer() {
+  const containerRef = useRef(null);
+  useImageTrail(containerRef);
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 35,
+        overflow: "hidden",
+      }}
+    />
+  );
+}
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const welcomeRef = useRef(null);
+  const text2Ref = useRef(null);
+  const logosRef= useRef(null);
+  const dealsCardRef= useRef(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  // ✨ Two ref groups for opposite directions
+  const textRefsDown = useRef([]);
+  const textRefsUp = useRef([]);
+  const hasAnimated = useRef(false);
+
+  const addToRefsDown = (el) => {
+    if (el && !textRefsDown.current.includes(el)) textRefsDown.current.push(el);
+  };
+  const addToRefsUp = (el) => {
+    if (el && !textRefsUp.current.includes(el)) textRefsUp.current.push(el);
+  };
+
+  useLayoutEffect(() => {
+    // initial positions
+    gsap.set(textRefsDown.current, { y: 50, opacity: 0 });
+    gsap.set(textRefsUp.current, { y: -50, opacity: 0 });
+
+    const animateText = () => {
+      if (hasAnimated.current) return;
+      hasAnimated.current = true;
+
+      // two separate reveal directions
+      textReveal(textRefsDown.current);
+      textReveal(textRefsUp.current);
+    };
+
+    window.addEventListener("textReveal", animateText, { once: true });
+    if (window.__textRevealAlreadyFired) animateText();
+    return () => window.removeEventListener("textReveal", animateText);
+  }, []);
+  useEffect(() => {
+    // If loader was already done earlier, manually trigger the text reveal again
+    if (window.__textRevealAlreadyFired) {
+      window.dispatchEvent(new Event("textReveal"));
+    }
+  
+    // Reset flag when leaving Home page — so animation can run again on return
+    return () => {
+      window.__textRevealAlreadyFired = false;
+    };
+  }, []);
+
+  useScrollFadeIn(welcomeRef);
+  useScrollFadeIn(text2Ref);
+  useScrollFadeIn(logosRef);
+  useScrollFadeIn(dealsCardRef,{ stagger: 0.75});
+
+  return (
+    <TwoStageLoader>
+    <SmoothScroll>
+      <div className="bg-[#E5E5DD] min-h-screen w-screen">
+        <section className="font-['Inter'] w-screen overflow-visible">
+          <Navbar />
+          <div className="text-black text-4xl font-mono ml-10 mr-10 mb-10 relative flex justify-between items-start overflow-visible">
+            <ImageTrailContainer />
+
+                       
+            <div className="flex flex-col h-[73vh] justify-between relative z-[50]">                                                                            
+              <div className="p-6 pt-18">
+                <span ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>
+                  WEAR <span className="font-bold pt-4">TREND</span>
+                </span>
+                <br />
+                <span ref={addToRefsUp} style={{ opacity: 0, transform: "translateY(-50px)", display: "inline-block" }}>
+                  WITH <span className="font-bold">CARTZ</span>
+                </span>
+              </div>
+
+              <div className="w-[360px] pl-2 pr-2 pb-4" style={{ lineHeight: "0.5" }}>                                                                          
+                <span className="text-lg text-gray-500" ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>    
+                  Inspired by the cosmic wonders,
+                  <br /> we curated a collection that
+                </span>
+                <br />
+                <span className="text-lg" ref={addToRefsUp} style={{ opacity: 0, transform: "translateY(-50px)", display: "inline-block" }}>
+                  blends elegance, innovation and a touch of magic
+                </span>
+              </div>
+            </div>
+
+            <Landingimages />
+
+            {/* RIGHT TEXT SECTION */}
+            <div className="flex flex-col h-[73vh] justify-between z-[50]">
+              <div className="flex flex-col m-2 pt-16" style={{ lineHeight: "0.3" }}>
+                <span className="pt-4" ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>
+                  NEW DIMENSION{" "}
+                </span>
+                <br />
+                <div className="flex items-center">
+                  <span ref={addToRefsUp} style={{ opacity: 0, transform: "translateY(-50px)", display: "inline-block" }}>
+                    TO <span className="pl-8">STYLE</span>
+                  </span>
+                  <span className="text-5xl pl-2 pt-2">👓</span>
+                </div>
+              </div>
+
+              <div className="w-[350px] pl-2 pr-2 pb-4" style={{ lineHeight: "0.6" }}>
+                <span className="text-xl text-gray-500" ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>
+                  HERE, it's one small step for{" "}
+                  <span className="font-bold text-black">URBAN CARTZ</span>, one celestial
+                  leap for fashion
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <Scrollingtext />
+        </section>
+
+        <hr className="w-screen border-t-2 border-dotted h-8 text-black m-8" />
+
+        {/* Fade-In Section */}
+        <section className="w-screen">
+          <div ref={welcomeRef} className="text-black text-4xl font-semibold m-10 w-screen ">
+            <span className="text-gray-400 text-3xl py-8 block stagger-line">
+              Welcome to CARTSY
+            </span>
+            <p className="py-6 leading-tight font-stretch-extra-expanded">
+              <span className="stagger-line block">
+                We're a consumer-centric brand partner that
+              </span>
+              <span className="stagger-line block">
+                helps thoughtful goods become market-leading
+              </span>
+              <span className="stagger-line block">brands that people love to buy.</span>
+            </p>
+          </div>
+
+          <HomeCard />
+          <h1 className="px-10 text-[80px] font-extrabold">Gadgets</h1>
+          <Gadgets />
+
+          <div className="text-6xl mt-20 ml-10 text-black font-bold flex justify-between w-[90%]" ref={dealsCardRef}>
+            <p>Top Deals and Discounts</p>
+            <IoIosArrowDroprightCircle className="cursor-pointer active:scale-50 duration-200" />
+          </div>
+
+          <div className="flex bg-[#afafa7] mt-14 mb-10">
+            <DealsCards />
+          </div>
+
+          <div ref={text2Ref}>
+            <h2 className="text-black text-5xl pt-10 pb-2 font-bold text-center">
+              Premium clothing for every occasion
+            </h2>
+            <p className="text-[#4B5563] text-2xl pb-10 text-center">
+              Collaboration with{" "}
+              <span className="text-black font-bold">brands you love</span> around the world
+            </p>
+          </div>
+
+          <div className="w-full overflow-hidden" ref={logosRef}>
+            <div className="marquee-track whitespace-nowrap flex items-center m-10">
+              <Image
+                src="/logos.png"
+                alt="Placeholder"
+                width={1200}
+                height={200}
+                className="mx-auto my-10"
+              />
+              <Image
+                src="/logos.png"
+                alt="Placeholder"
+                width={1200}
+                height={200}
+                className="mx-auto my-10"
+              />
+              <Image
+                src="/logos.png"
+                alt="Placeholder"
+                width={1200}
+                height={200}
+                className="mx-auto my-10"
+              />
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
+    </SmoothScroll>
+    </TwoStageLoader>
   );
 }

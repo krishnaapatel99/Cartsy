@@ -1,0 +1,218 @@
+"use client";
+import React, { useEffect, useRef } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+function Gadgets() {
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+  const scrollTriggersRef = useRef([]);
+
+  useEffect(() => {
+    if (!leftRef.current || !rightRef.current) return;
+
+    let hasSetup = false;
+
+    // Setup function to create ScrollTriggers
+    const setupScrollTriggers = () => {
+      if (hasSetup) return; // Prevent duplicate setup
+      
+      // Check if refs are still available
+      if (!leftRef.current || !rightRef.current) return;
+      
+      hasSetup = true;
+
+      // Clean up existing ScrollTriggers
+      scrollTriggersRef.current.forEach((st) => {
+        if (st && st.kill) st.kill();
+      });
+      scrollTriggersRef.current = [];
+
+      // CRITICAL: Specify scroller for Lenis integration
+      // The scroller proxy is set up in SmoothScroll component on document.body
+      const scrollTriggerConfig = {
+        scroller: document.body, // Use the scroller proxy set up by Lenis
+        invalidateOnRefresh: true,
+      };
+
+      // Left parent div slides from -X with tilt
+      const leftTween = gsap.to(leftRef.current, {
+        x: 0,
+        rotateZ: 0, // start tilted counterclockwise
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          ...scrollTriggerConfig,
+          trigger: leftRef.current,
+          start: "top 50%",
+          markers: true,
+        },
+      });
+
+      // Right parent div slides from +X with tilt
+      const rightTween = gsap.to(rightRef.current, {
+        x: 0,
+        rotateZ: 0, // start tilted clockwise
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          ...scrollTriggerConfig,
+          trigger: rightRef.current,
+          start: "top 50%",
+        },
+      });
+
+      // Store ScrollTrigger instances for cleanup
+      if (leftTween.scrollTrigger) {
+        scrollTriggersRef.current.push(leftTween.scrollTrigger);
+      }
+      if (rightTween.scrollTrigger) {
+        scrollTriggersRef.current.push(rightTween.scrollTrigger);
+      }
+    };
+
+        let cleanup = null;
+
+    // Check if loader is already complete using multiple methods
+    const isLoaderComplete = 
+      window.__loaderComplete === true || 
+      window.__loaderRevealStarted === true ||
+      (typeof document !== "undefined" && 
+       document.body && 
+       getComputedStyle(document.body).overflowY !== "hidden");
+
+        // Fallback timeout in case events don't fire or component mounts late      
+    const fallbackTimeout = setTimeout(() => {
+      if (!hasSetup) {
+        setupScrollTriggers();
+        setTimeout(() => {
+          ScrollTrigger.refresh(true);
+        }, 100);
+      }
+    }, 3000);
+
+        if (isLoaderComplete) {
+      // Loader already done, setup after a delay to ensure Lenis is ready      
+      setTimeout(() => {
+        setupScrollTriggers();
+        // Refresh after setup to ensure positions are calculated correctly
+        setTimeout(() => {
+          ScrollTrigger.refresh(true);
+        }, 100);
+      }, 500);
+      
+      cleanup = () => {
+        clearTimeout(fallbackTimeout);
+        // Cleanup ScrollTriggers
+        scrollTriggersRef.current.forEach((st) => {
+          if (st && st.kill) st.kill();
+        });
+        scrollTriggersRef.current = [];
+      };
+    } else {
+      // Wait for loader to complete
+      const handleLoaderComplete = () => {
+        // Wait a bit for Lenis to be fully ready and scroller proxy set up
+        setTimeout(() => {
+          setupScrollTriggers();
+          // Refresh after setup to ensure positions are calculated correctly
+          setTimeout(() => {
+            ScrollTrigger.refresh(true);
+          }, 100);
+        }, 500);
+      };
+
+      window.addEventListener("loaderComplete", handleLoaderComplete);
+      window.addEventListener("loaderRevealStart", handleLoaderComplete);       
+
+      cleanup = () => {
+        clearTimeout(fallbackTimeout);
+        window.removeEventListener("loaderComplete", handleLoaderComplete);     
+        window.removeEventListener("loaderRevealStart", handleLoaderComplete);  
+        // Cleanup ScrollTriggers
+        scrollTriggersRef.current.forEach((st) => {
+          if (st && st.kill) st.kill();
+        });
+        scrollTriggersRef.current = [];
+      };
+    }
+
+    return cleanup;
+  }, []);
+
+  return (
+    <div>
+      <div className="flex">
+        {/* Left gadgets grid */}
+        <div
+          ref={leftRef}
+          className="flex w-[35vw] grid grid-cols-2 ml-10 mt-5 h-[80vh] mb-10 mr-8 rounded-xl bg-[#ABABA1] shadow-2xl inset-shadow-black"
+          style={{
+            transform: "translateX(-500px) rotateZ(-10deg)",
+          }}
+        
+        >
+          <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+            <Image
+              src="/wireless.png"
+              alt="headphones"
+              width={250}
+              height={230}
+              className="rounded-xl"
+            />
+          </div>
+          <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+            <Image
+              src="/smartwatches.png"
+              alt="smartwatches"
+              width={250}
+              height={230}
+              className="rounded-xl"
+            />
+          </div>
+          <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+            <Image
+              src="/neckband.png"
+              alt="neckband"
+              width={250}
+              height={230}
+              className="rounded-2xl"
+            />
+          </div>
+          <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+            <Image
+              src="/earbuds.png"
+              alt="earbuds"
+              width={250}
+              height={230}
+              className="rounded-xl"
+            />
+          </div>
+        </div>
+
+        {/* Right phone image */}
+        <div
+          ref={rightRef}
+          className="h-[75vh] w-[55vw] bg-[#B9B9B3] ml-6 mt-5 mb-10 rounded-xl"
+          style={{
+            transform: "translateX(500px) rotateZ(10deg)",
+          }}
+        
+        >
+          <Image
+            src="/mobile.png"
+            alt="phone"
+            width={940}
+            height={330}
+            className="rounded-xl"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Gadgets;

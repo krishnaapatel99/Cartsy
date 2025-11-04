@@ -1,26 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@400;500;600;700;800&display=swap');
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@import "tailwindcss";
+
+@import 'lenis/dist/lenis.css';
+
+@layer utilities {
+  .font-encodeCondensed {
+    font-family: 'Encode Sans Condensed', sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+
+html,body {
+    overflow-x: hidden;
+    
+    background-color: #E5E5DD;
+}
+
+
+
+.marquee {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    white-space: nowrap;
+  }
+  
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 20s linear infinite;
+    will-change: transform;
+  }
+  
+  .marquee-track span {
+    display: inline-block;
+    white-space: nowrap;
+    padding-right: 2rem; /* space between repeated elements */
+  }
+  
+  /* Remove dummy element — not needed in Lenis */
+  /* .marquee::after {
+    content: "";
+    display: block;
+    height: 1px;
+  } */
+  
+  /* Marquee animation */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .image-trail {
+    will-change: transform, opacity;  /* Optimizes for smoother GPU-accelerated animations */
+    pointer-events: none;             /* Prevents the images from blocking cursor movement */
+    position: absolute;               /* Ensures each trail image positions correctly */
+  }
+  @keyframes changeTexture {
+    0%, 33% {
+      background-image: url('/3.png');
+    }
+    34%, 66% {
+      background-image: url('/89.png');
+    }
+    67%, 100% {
+      background-image: url('/23.png');
+    }
+  }
+  
+  /* Default text — solid black */
+  .text-hover-texture {
+    color: black;
+    font-weight: 800;
+    display: inline-block;
+    transition: all 0.4s ease;
+  }
+  
+  
+  /* Hover state — shows animated background through text */
+ /* When the parent (.group) is hovered, apply animation to both children */
+.group:hover .text-hover-texture {
+  color: transparent;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: changeTexture 0.5s linear infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.animate-blink {
+  animation: blink 1s infinite;
 }

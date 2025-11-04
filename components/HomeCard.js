@@ -1,0 +1,149 @@
+"use client";
+import React, { useRef } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(ScrollTrigger);
+
+function HomeCard() {
+  const cardRef = useRef(null);
+  const contentRef = useRef(null);
+  const moveTween = useRef(null);
+  // moveListener is now only managed inside useGSAP/ScrollTrigger
+  const moveListener = useRef(null); 
+
+  // Removed the initial useEffect for mousemove listener setup
+
+  useGSAP(() => {
+    const card = cardRef.current;
+    const content = contentRef.current;
+
+    // 🧭 Function to move card with cursor (defined inside useGSAP for scope)
+    const moveCardWithCursor = (e) => {
+      const currentScale = gsap.getProperty(card, "scale");
+      // Only apply the effect if the card is small (initial state)
+      if (currentScale <= 0.25) {
+        moveTween.current = gsap.to(card, {
+          x: (e.clientX - window.innerWidth / 2) * 0.5,
+          duration: 1,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      }
+    };
+
+    // 🚀 Scroll animation
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: card,
+        start: "top 50%",
+        scrub: true,
+        markers: true,
+        onUpdate: (self) => {
+          // If scroll progress is past the initial small movement
+          if (self.progress > 0.05) {
+            // 🛑 Stop and remove the mousemove effect
+            if (moveTween.current) moveTween.current.kill();
+            if (moveListener.current) {
+              window.removeEventListener("mousemove", moveListener.current);
+              moveListener.current = null;
+              // Optionally reset x when cursor effect is stopped
+              gsap.to(card, { x: 0, duration: 0.5, ease: "power1.out" });
+            }
+          } else {
+            // ✅ Re-attach the mousemove effect when the user scrolls back up
+            // and the card is near its starting (small) position.
+            if (!moveListener.current) {
+              window.addEventListener("mousemove", moveCardWithCursor);
+              moveListener.current = moveCardWithCursor;
+            }
+          }
+        },
+      },
+    });
+
+    // Step 1: move down to -210px with scale 0.2
+    tl.fromTo(
+      card,
+      { y: -470, scale: 0.2, transformOrigin: "center top" },
+      { y: -250, scale: 0.2, ease: "none" }
+    );
+
+    // Step 2: move back up and scale to 1 (x: 0 is important for re-centering)
+    tl.to(card, {
+      y: 2,
+      scale: 1,
+      x: 0, 
+      ease: "sine.inOut",
+    });
+
+    // Step 3: fade in content
+    tl.fromTo(
+      content,
+      { opacity: 0 },
+      { opacity: 1, ease: "bounce.out" },
+      "=0.4"
+    );
+
+    // Initial setup: Attach the listener immediately on mount
+    window.addEventListener("mousemove", moveCardWithCursor);
+    moveListener.current = moveCardWithCursor;
+
+    // Initial GSAP set for a clean start
+    gsap.set(card, { x: 0 });
+
+    // Cleanup: Kill the listener and tweens when the component unmounts
+    return () => {
+        window.removeEventListener("mousemove", moveCardWithCursor);
+        if (moveTween.current) moveTween.current.kill();
+    }
+    
+  }, { scope: cardRef });
+
+  const CARD_DATA = [
+    { id: 1, imageUrl: "/sofa.png", title: "Modern Furniture Collection", description: "Sleek and functional designs for contemporary living spaces." },
+    { id: 2, imageUrl: "/home essentials.png", title: "Essential Home Goods", description: "Everything you need to make your house a home." },
+    { id: 3, imageUrl: "/jean.png", title: "Premium Denim Apparel", description: "Durable and stylish jeans for every occasion and fit." },
+    { id: 4, imageUrl: "/shirt.png", title: "Trendy Shirt Collection", description: "From casual tees to formal shirts, find your perfect top." },
+    { id: 5, imageUrl: "/sneaker.png", title: "Stylish Sneakers & Kicks", description: "Step up your game with our latest sneaker drops." },
+    { id: 6, imageUrl: "/purses.png", title: "Versatile Carry Bags", description: "Functional and fashionable bags for all your essentials." },
+  ];
+
+  return (
+    <div ref={cardRef} className="bg-[#A7A79D] m-10 rounded-2xl py-10">
+      <div ref={contentRef}>
+        <h2 className="text-black px-6 text-4xl sm:text-6xl lg:text-[80px] font-extrabold text-center sm:text-left">
+          Discover Your Items
+        </h2>
+
+        <div className="flex flex-wrap justify-between gap-y-10 p-6 max-w-7xl mx-auto">
+          {CARD_DATA.map((item) => (
+            <div
+              key={item.id}
+              className="bg-[#E5E5DD] border border-[#DADAD0] rounded-3xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:scale-[1.02] transition-all duration-300 overflow-hidden w-full sm:w-[45%] lg:w-[30%]"
+            >
+              <div className="relative w-full h-64 sm:h-72">
+                <Image
+                  src={item.imageUrl}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority={item.id === 1}
+                />
+              </div>
+
+              <div className="p-5 text-[#2E2E2B]">
+                <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
+                <p className="text-sm text-[#4B4B48]">{item.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default HomeCard;
