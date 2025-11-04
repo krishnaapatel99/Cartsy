@@ -152,7 +152,7 @@ const TwoStageLoader = ({ children }) => {
        
         <div className="inter-logo absolute top-2/5 left-1/2 -translate-x-1/2 flex z-[100] text-white text-5xl">
           <div className="word" id="word-1">
-            <span className="font-sans tracking-wide italic inline-block translate-y-[60%] opacity-0 relative right-4">
+            <span className="font-editorial tracking-wide italic inline-block translate-y-[60%] opacity-0 relative right-4">
               URBAN
             </span>
           </div>

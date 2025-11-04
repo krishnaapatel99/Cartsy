@@ -136,8 +136,8 @@ export default function Home() {
                   NEW DIMENSION{" "}
                 </span>
                 <br />
-                <div className="flex items-center" ref={addToRefsUp}>
-                  <span  style={{ opacity: 0, transform: "translateY(-50px)", display: "inline-block" }}>
+                <div className="flex items-center" ref={addToRefsUp}  style={{ opacity: 0, transform: "translateY(-50px)"}}>
+                  <span >
                     TO <span className="pl-8">STYLE</span>
                   </span>
                   <span className="text-5xl pl-2 pt-2">👓</span>

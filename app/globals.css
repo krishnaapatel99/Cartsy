@@ -1,94 +1,96 @@
+/* === GOOGLE FONT IMPORT === */
 @import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@400;500;600;700;800&display=swap');
 
+/* === PP EDITORIAL NEW (CDN with heavy weight support) === */
+@import url('https://fonts.cdnfonts.com/css/editorial-new');
+
+/* === TAILWIND IMPORTS === */
 @import "tailwindcss";
-
-
-
-@import "tailwindcss";
-
 @import 'lenis/dist/lenis.css';
 
+/* === CUSTOM UTILITIES === */
 @layer utilities {
   .font-encodeCondensed {
     font-family: 'Encode Sans Condensed', sans-serif;
   }
+
+  /* Editorial font family (includes heavy weight) */
+  .font-editorial {
+    font-family: 'Editorial New', serif;
+  }
+
+  /* Optional: Force heavy style shortcut */
+  .font-editorial-heavy {
+    font-family: 'Editorial New', serif;
+    font-weight: 900;
+  }
 }
 
-
-
-html,body {
-    overflow-x: hidden;
-    
-    background-color: #E5E5DD;
+/* === GLOBAL STYLES === */
+html, body {
+  overflow-x: hidden;
+  background-color: #E5E5DD;
 }
 
-
-
+/* === MARQUEE ANIMATION === */
 .marquee {
-    overflow: hidden;
-    width: 100%;
-    position: relative;
-    white-space: nowrap;
-  }
-  
-  .marquee-track {
-    display: flex;
-    width: max-content;
-    animation: marquee 20s linear infinite;
-    will-change: transform;
-  }
-  
-  .marquee-track span {
-    display: inline-block;
-    white-space: nowrap;
-    padding-right: 2rem; /* space between repeated elements */
-  }
-  
-  /* Remove dummy element — not needed in Lenis */
-  /* .marquee::after {
-    content: "";
-    display: block;
-    height: 1px;
-  } */
-  
-  /* Marquee animation */
-  @keyframes marquee {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  white-space: nowrap;
+}
 
-  .image-trail {
-    will-change: transform, opacity;  
-    pointer-events: none;             
-    position: absolute;               
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 20s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track span {
+  display: inline-block;
+  white-space: nowrap;
+  padding-right: 2rem; /* space between repeated elements */
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
   }
-  @keyframes changeTexture {
-    0%, 33% {
-      background-image: url('/3.png');
-    }
-    34%, 66% {
-      background-image: url('/89.png');
-    }
-    67%, 100% {
-      background-image: url('/23.png');
-    }
+  100% {
+    transform: translateX(-50%);
   }
-  
-  /* Default text — solid black */
-  .text-hover-texture {
-    color: black;
-    font-weight: 800;
-    display: inline-block;
-    transition: all 0.4s ease;
+}
+
+/* === IMAGE TRAIL EFFECT === */
+.image-trail {
+  will-change: transform, opacity;  
+  pointer-events: none;             
+  position: absolute;               
+}
+
+/* === TEXTURE CHANGE ON HOVER === */
+@keyframes changeTexture {
+  0%, 33% {
+    background-image: url('/3.png');
   }
-  
-  
- 
- /* When the parent (.group) is hovered, apply animation to both children */
+  34%, 66% {
+    background-image: url('/89.png');
+  }
+  67%, 100% {
+    background-image: url('/23.png');
+  }
+}
+
+/* Default text — solid black */
+.text-hover-texture {
+  color: black;
+  font-weight: 800;
+  display: inline-block;
+  transition: all 0.4s ease;
+}
+
+/* When the parent (.group) is hovered, apply animation */
 .group:hover .text-hover-texture {
   color: transparent;
   background-size: cover;
@@ -99,6 +101,7 @@ html,body {
   animation: changeTexture 0.5s linear infinite;
 }
 
+/* === BLINKING DOT ANIMATION === */
 @keyframes blink {
   0%, 100% {
     opacity: 1;
@@ -107,6 +110,7 @@ html,body {
     opacity: 0;
   }
 }
+
 .animate-blink {
   animation: blink 1s infinite;
 }
