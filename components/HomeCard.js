@@ -10,19 +10,19 @@ function HomeCard() {
   const cardRef = useRef(null);
   const contentRef = useRef(null);
   const moveTween = useRef(null);
-  // moveListener is now only managed inside useGSAP/ScrollTrigger
+  
   const moveListener = useRef(null); 
 
-  // Removed the initial useEffect for mousemove listener setup
+  
 
   useGSAP(() => {
     const card = cardRef.current;
     const content = contentRef.current;
 
-    // 🧭 Function to move card with cursor (defined inside useGSAP for scope)
+   
     const moveCardWithCursor = (e) => {
       const currentScale = gsap.getProperty(card, "scale");
-      // Only apply the effect if the card is small (initial state)
+      
       if (currentScale <= 0.25) {
         moveTween.current = gsap.to(card, {
           x: (e.clientX - window.innerWidth / 2) * 0.5,
@@ -33,7 +33,7 @@ function HomeCard() {
       }
     };
 
-    // 🚀 Scroll animation
+  
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: card,
@@ -41,19 +41,18 @@ function HomeCard() {
         scrub: true,
         markers: true,
         onUpdate: (self) => {
-          // If scroll progress is past the initial small movement
+        
           if (self.progress > 0.05) {
-            // 🛑 Stop and remove the mousemove effect
+       
             if (moveTween.current) moveTween.current.kill();
             if (moveListener.current) {
               window.removeEventListener("mousemove", moveListener.current);
               moveListener.current = null;
-              // Optionally reset x when cursor effect is stopped
+             
               gsap.to(card, { x: 0, duration: 0.5, ease: "power1.out" });
             }
           } else {
-            // ✅ Re-attach the mousemove effect when the user scrolls back up
-            // and the card is near its starting (small) position.
+           
             if (!moveListener.current) {
               window.addEventListener("mousemove", moveCardWithCursor);
               moveListener.current = moveCardWithCursor;
@@ -63,14 +62,14 @@ function HomeCard() {
       },
     });
 
-    // Step 1: move down to -210px with scale 0.2
+   
     tl.fromTo(
       card,
       { y: -470, scale: 0.2, transformOrigin: "center top" },
       { y: -250, scale: 0.2, ease: "none" }
     );
 
-    // Step 2: move back up and scale to 1 (x: 0 is important for re-centering)
+  
     tl.to(card, {
       y: 2,
       scale: 1,
@@ -78,7 +77,7 @@ function HomeCard() {
       ease: "sine.inOut",
     });
 
-    // Step 3: fade in content
+    
     tl.fromTo(
       content,
       { opacity: 0 },
@@ -86,14 +85,14 @@ function HomeCard() {
       "=0.4"
     );
 
-    // Initial setup: Attach the listener immediately on mount
+
     window.addEventListener("mousemove", moveCardWithCursor);
     moveListener.current = moveCardWithCursor;
 
-    // Initial GSAP set for a clean start
+
     gsap.set(card, { x: 0 });
 
-    // Cleanup: Kill the listener and tweens when the component unmounts
+   
     return () => {
         window.removeEventListener("mousemove", moveCardWithCursor);
         if (moveTween.current) moveTween.current.kill();

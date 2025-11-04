@@ -62,9 +62,9 @@ html,body {
   }
 
   .image-trail {
-    will-change: transform, opacity;  /* Optimizes for smoother GPU-accelerated animations */
-    pointer-events: none;             /* Prevents the images from blocking cursor movement */
-    position: absolute;               /* Ensures each trail image positions correctly */
+    will-change: transform, opacity;  
+    pointer-events: none;             
+    position: absolute;               
   }
   @keyframes changeTexture {
     0%, 33% {
@@ -87,7 +87,7 @@ html,body {
   }
   
   
-  /* Hover state — shows animated background through text */
+ 
  /* When the parent (.group) is hovered, apply animation to both children */
 .group:hover .text-hover-texture {
   color: transparent;

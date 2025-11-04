@@ -47,7 +47,7 @@ export default function Home() {
   const logosRef= useRef(null);
   const dealsCardRef= useRef(null);
 
-  // ✨ Two ref groups for opposite directions
+
   const textRefsDown = useRef([]);
   const textRefsUp = useRef([]);
   const hasAnimated = useRef(false);
@@ -60,7 +60,7 @@ export default function Home() {
   };
 
   useLayoutEffect(() => {
-    // initial positions
+    
     gsap.set(textRefsDown.current, { y: 50, opacity: 0 });
     gsap.set(textRefsUp.current, { y: -50, opacity: 0 });
 
@@ -68,7 +68,7 @@ export default function Home() {
       if (hasAnimated.current) return;
       hasAnimated.current = true;
 
-      // two separate reveal directions
+ 
       textReveal(textRefsDown.current);
       textReveal(textRefsUp.current);
     };

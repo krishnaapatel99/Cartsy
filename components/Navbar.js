@@ -13,7 +13,7 @@ export default function Navbar() {
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("Loading...");
 
-  // 🕒 Update time every second
+  
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -28,7 +28,7 @@ export default function Navbar() {
     return () => clearInterval(interval);
   }, []);
 
-  // 📍 Get location from browser
+ 
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(async (position) => {
@@ -55,29 +55,29 @@ export default function Navbar() {
     const el = navbarRef.current;
     if (!el) return;
 
-    // Immediately hide before paint (no flash)
+  
     gsap.set(el, { autoAlpha: 0, y: -100 });
 
-    // Listen for the reveal event only once
+   
     const animateNavbar = () => {
-      if (hasAnimated.current) return; // 🧠 prevent reanimation
+      if (hasAnimated.current) return; 
       hasAnimated.current = true;
       gsap.to(el, {
         autoAlpha: 1,
         y: 0,
         duration: 0.8,
         delay:0.2,
-        ease: "power2.out", // or "elastic.out(1, 0.5)" for bounce
+        ease: "power2.out", 
       });
     };
 
     // Register listener
     window.addEventListener("navbarReveal", animateNavbar, { once: true });
 
-    // In case navbarReveal fired before mount
+  
     if (window.__navbarAlreadyFired) animateNavbar();
 
-    // Cleanup
+   
     return () =>
       window.removeEventListener("navbarReveal", animateNavbar);
   }, []);
@@ -86,7 +86,7 @@ export default function Navbar() {
     <div
       ref={navbarRef}
       className="relative z-[91] mr-4 shadow-sm"
-      style={{ visibility: "hidden" }} // stays hidden until GSAP shows it
+      style={{ visibility: "hidden" }} 
     >
       <div className="flex justify-between items-center p-4 bg-[#E5E5DD]   text-black ">
         <div className="font-sans flex items-center gap-4 text-[14px] font-bold tracking-tight">

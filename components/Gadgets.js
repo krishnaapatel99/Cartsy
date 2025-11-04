@@ -16,11 +16,11 @@ function Gadgets() {
 
     let hasSetup = false;
 
-    // Setup function to create ScrollTriggers
+   
     const setupScrollTriggers = () => {
-      if (hasSetup) return; // Prevent duplicate setup
+      if (hasSetup) return; 
       
-      // Check if refs are still available
+   
       if (!leftRef.current || !rightRef.current) return;
       
       hasSetup = true;
@@ -31,17 +31,16 @@ function Gadgets() {
       });
       scrollTriggersRef.current = [];
 
-      // CRITICAL: Specify scroller for Lenis integration
-      // The scroller proxy is set up in SmoothScroll component on document.body
+     
       const scrollTriggerConfig = {
-        scroller: document.body, // Use the scroller proxy set up by Lenis
+        scroller: document.body, 
         invalidateOnRefresh: true,
       };
 
-      // Left parent div slides from -X with tilt
+     
       const leftTween = gsap.to(leftRef.current, {
         x: 0,
-        rotateZ: 0, // start tilted counterclockwise
+        rotateZ: 0,
         duration: 1.2,
         ease: "power3.out",
         scrollTrigger: {
@@ -52,10 +51,10 @@ function Gadgets() {
         },
       });
 
-      // Right parent div slides from +X with tilt
+    
       const rightTween = gsap.to(rightRef.current, {
         x: 0,
-        rotateZ: 0, // start tilted clockwise
+        rotateZ: 0, 
         duration: 1.2,
         ease: "power3.out",
         scrollTrigger: {
@@ -65,7 +64,7 @@ function Gadgets() {
         },
       });
 
-      // Store ScrollTrigger instances for cleanup
+     
       if (leftTween.scrollTrigger) {
         scrollTriggersRef.current.push(leftTween.scrollTrigger);
       }
@@ -76,7 +75,6 @@ function Gadgets() {
 
         let cleanup = null;
 
-    // Check if loader is already complete using multiple methods
     const isLoaderComplete = 
       window.__loaderComplete === true || 
       window.__loaderRevealStarted === true ||
@@ -84,7 +82,7 @@ function Gadgets() {
        document.body && 
        getComputedStyle(document.body).overflowY !== "hidden");
 
-        // Fallback timeout in case events don't fire or component mounts late      
+           
     const fallbackTimeout = setTimeout(() => {
       if (!hasSetup) {
         setupScrollTriggers();
@@ -95,10 +93,10 @@ function Gadgets() {
     }, 3000);
 
         if (isLoaderComplete) {
-      // Loader already done, setup after a delay to ensure Lenis is ready      
+         
       setTimeout(() => {
         setupScrollTriggers();
-        // Refresh after setup to ensure positions are calculated correctly
+      
         setTimeout(() => {
           ScrollTrigger.refresh(true);
         }, 100);
@@ -106,19 +104,19 @@ function Gadgets() {
       
       cleanup = () => {
         clearTimeout(fallbackTimeout);
-        // Cleanup ScrollTriggers
+        
         scrollTriggersRef.current.forEach((st) => {
           if (st && st.kill) st.kill();
         });
         scrollTriggersRef.current = [];
       };
     } else {
-      // Wait for loader to complete
+    
       const handleLoaderComplete = () => {
-        // Wait a bit for Lenis to be fully ready and scroller proxy set up
+    
         setTimeout(() => {
           setupScrollTriggers();
-          // Refresh after setup to ensure positions are calculated correctly
+         
           setTimeout(() => {
             ScrollTrigger.refresh(true);
           }, 100);
@@ -132,7 +130,7 @@ function Gadgets() {
         clearTimeout(fallbackTimeout);
         window.removeEventListener("loaderComplete", handleLoaderComplete);     
         window.removeEventListener("loaderRevealStart", handleLoaderComplete);  
-        // Cleanup ScrollTriggers
+       
         scrollTriggersRef.current.forEach((st) => {
           if (st && st.kill) st.kill();
         });
@@ -146,7 +144,7 @@ function Gadgets() {
   return (
     <div>
       <div className="flex">
-        {/* Left gadgets grid */}
+    
         <div
           ref={leftRef}
           className="flex w-[35vw] grid grid-cols-2 ml-10 mt-5 h-[80vh] mb-10 mr-8 rounded-xl bg-[#ABABA1] shadow-2xl inset-shadow-black"
@@ -193,7 +191,7 @@ function Gadgets() {
           </div>
         </div>
 
-        {/* Right phone image */}
+        
         <div
           ref={rightRef}
           className="h-[75vh] w-[55vw] bg-[#B9B9B3] ml-6 mt-5 mb-10 rounded-xl"

@@ -10,9 +10,9 @@ export default function useScrollFadeIn(ref, options = {}) {
   useEffect(() => {
     if (!ref.current) return;
 
-    // Wait for loader to complete if it hasn't already
+  
     const setupScrollTrigger = () => {
-      // Clean up any existing ScrollTrigger
+   
       if (scrollTriggerRef.current) {
         const tween = scrollTriggerRef.current;
         if (tween.scrollTrigger) {
@@ -43,9 +43,9 @@ export default function useScrollFadeIn(ref, options = {}) {
 
     let cleanup = null;
 
-    // Check if loader is already complete
+   
     if (window.__loaderRevealStarted || document.body.style.overflowY !== "hidden") {
-      // Loader already done, setup immediately
+ 
       setupScrollTrigger();
       cleanup = () => {
         if (scrollTriggerRef.current) {
@@ -57,10 +57,10 @@ export default function useScrollFadeIn(ref, options = {}) {
         }
       };
     } else {
-      // Wait for loader to complete
+      
       const handleLoaderComplete = () => {
         setupScrollTrigger();
-        // Refresh ScrollTrigger after a brief delay to ensure positions are correct
+       
         setTimeout(() => {
           ScrollTrigger.refresh();
         }, 100);

@@ -42,7 +42,7 @@ function Landingimages() {
     }
   }, [currentIndex]);
 
-  // Destructure outside, only once
+  
   const { leftImage, video, rightImage } = mediaSets[currentIndex];
 
   useLayoutEffect(() => {
@@ -73,7 +73,7 @@ function Landingimages() {
     );
   }, []);
 
-  // GSAP photo animation and hover interactions
+  
   useEffect(() => {
     const startAnimation = () => {
       if (animationStartedRef.current) return;
@@ -87,7 +87,7 @@ function Landingimages() {
         duration: 0.8,
         ease: "cardEase",
       })
-        // Animate scale up & trigger navbar reveal
+        
         .to(
           ".photo-center",
           {
@@ -95,13 +95,13 @@ function Landingimages() {
             duration: 0.8,
             ease: "cardEase",
             onStart: () => {
-              // ✅ Navbar reveal starts here
+            
               window.dispatchEvent(new Event("navbarReveal"));
             },
           },
           "+=0"
         )
-        // Fade in & move left photo
+       
         .to(
           ".photo-left",
           {
@@ -121,7 +121,7 @@ function Landingimages() {
           },
           "-=0.1"
         )
-        // Fade in & move right photo in parallel
+       
         .to(
           ".photo-right",
           {
@@ -136,9 +136,7 @@ function Landingimages() {
           "<"
         );
 
-      // Hover effect for left photo
       const left = document.querySelector(".photo-left");
-      // Hover effect for right photo
       const right = document.querySelector(".photo-right");
 
       if (left) {
@@ -203,7 +201,7 @@ function Landingimages() {
       ref={containerRef}
       className="relative flex justify-center items-center h-[65vh] w-[55vw] overflow-visible  mb-24 z-[50] mr-12 "
     >
-      {/* Left Image */}
+      
       <div className="photo photo-left absolute w-[240px] h-[300px] shadow-xl overflow-hidden cursor-pointer  ">
         <Image
           key={leftImage}
@@ -215,11 +213,11 @@ function Landingimages() {
         />
       </div>
 
-      {/* Center Video */}
+    
       <div className="photo photo-center absolute w-[350px] h-[400px] shadow-2xl overflow-hidden ">
         <video
           ref={videoRef}
-          key={video} // forces video reload when switching
+          key={video} 
           src={video}
           autoPlay
           muted
@@ -229,7 +227,6 @@ function Landingimages() {
         />
       </div>
 
-      {/* Right Image */}
       <div className="photo photo-right absolute w-[240px] h-[300px] shadow-xl overflow-hidden cursor-pointer">
         <Image
           key={rightImage}

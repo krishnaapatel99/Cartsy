@@ -6,7 +6,7 @@ function Footer() {
   return (
     <footer className="bg-black text-[#E5E5DD] py-20 border-t border-[#2a2a2a]">
       <div className="max-w-7xl mx-auto px-8 md:px-16 grid md:grid-cols-4 gap-12">
-        {/* Brand Section */}
+      
         <div>
           <h2 className="text-4xl font-extrabold tracking-tight font-serif text-[#FBFCF7]">
             CARTSY
@@ -17,7 +17,7 @@ function Footer() {
           </p>
         </div>
 
-        {/* Explore */}
+    
         <div>
           <h3 className="text-lg font-semibold mb-4 font-serif text-[#FBFCF7]">
             Explore
@@ -34,7 +34,6 @@ function Footer() {
           </ul>
         </div>
 
-        {/* Customer Care */}
         <div>
           <h3 className="text-lg font-semibold mb-4 font-serif text-[#FBFCF7]">
             Customer Care
@@ -51,7 +50,7 @@ function Footer() {
           </ul>
         </div>
 
-        {/* Socials */}
+      
         <div>
           <h3 className="text-lg font-semibold mb-4 font-serif text-[#FBFCF7]">
             Follow Us
@@ -71,7 +70,7 @@ function Footer() {
         </div>
       </div>
 
-      {/* Bottom Line */}
+    
       <div className="border-t border-[#2a2a2a] mt-14 pt-6 text-center text-sm text-[#E5E5DD]/70 tracking-wide">
         © {new Date().getFullYear()} CARTSY — Crafted with cosmic inspiration ✨
       </div>
