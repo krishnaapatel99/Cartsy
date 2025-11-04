@@ -23,7 +23,7 @@ export default function useScrollFadeIn(ref, options = {}) {
 
       const tween = gsap.fromTo(
         ref.current,
-        { y: 60, opacity: 0 },
+        { y: -60, opacity: 0 },
         {
           y: 0,
           opacity: 1,
