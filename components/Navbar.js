@@ -91,7 +91,7 @@ export default function Navbar() {
       <div className="flex justify-between items-center p-4 bg-[#E5E5DD]   text-black ">
         <div className="font-sans flex items-center gap-4 text-[14px] font-bold tracking-tight">
         <span>{location}</span>
-      <span className="px-4">//</span>
+      <span className="px-4">{'//'}</span>
       <span className="flex items-center gap-1">
         <span className="text-black text-[10px] animate-blink">●</span>
         {time}

@@ -146,7 +146,8 @@ export default function Home() {
 
               <div className="w-[350px] pl-2 pr-2 pb-4" style={{ lineHeight: "0.6" }}>
                 <span className="text-xl text-gray-500" ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>
-                 " HERE, it's one small step for"{" "}
+                HERE, it&apos;s one small step for{" "}
+
                   <span className="font-bold text-black">URBAN CARTZ</span>, one celestial
                   leap for fashion
                 </span>
@@ -167,7 +168,8 @@ export default function Home() {
             </span>
             <p className="py-6 leading-tight font-stretch-extra-expanded">
               <span className="stagger-line block">
-               " We're a consumer-centric brand partner that"
+              We&apos;re a consumer-centric brand partner that
+
               </span>
               <span className="stagger-line block">
                 helps thoughtful goods become market-leading
