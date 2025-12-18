@@ -1,6 +1,8 @@
 "use client";
+export const dynamic = "force-dynamic";
 
-import React, { useLayoutEffect, useRef , useState, useEffect} from "react";
+
+import React, { useLayoutEffect, useRef , useState, useEffect, useMemo} from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { SiWish } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
@@ -11,7 +13,7 @@ import { supabaseBrowser } from "@/lib/supabaseClient";
 
 
 export default function Navbar() {
-  const supabase= supabaseBrowser();
+  const supabase = useMemo(() => supabaseBrowser(), []);
   const navbarRef = useRef(null);
   const hasAnimated = useRef(false); 
   const [user, setUser] = useState(null); 
