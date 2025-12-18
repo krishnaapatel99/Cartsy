@@ -184,7 +184,7 @@ export default function WishlistPage() {
           <div className='text-center py-16'>
             <FaHeart className='mx-auto text-gray-400 text-6xl mb-4' />
             <h2 className='text-2xl font-semibold mb-2'>Your wishlist is empty</h2>
-            <p className='text-gray-600 mb-6'>Looks like you haven't added anything to your wishlist yet.</p>
+            <p className='text-gray-600 mb-6'>Looks like you haven&apos;t added anything to your wishlist yet.</p>
             <Link 
               href='/products/all' 
               className='bg-black text-[#d8c7a8] px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg shadow-gray-500/50 active:scale-95 transition-transform duration-150'

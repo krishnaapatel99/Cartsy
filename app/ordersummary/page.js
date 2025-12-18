@@ -1,6 +1,7 @@
 
 "use client"
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Head from 'next/head';
 import AddressForm from '@/components/AddressForm';
 import { ShoppingCartIcon, MapPinIcon, CreditCardIcon } from '@heroicons/react/24/outline';
@@ -302,11 +303,13 @@ const startPayment = async () => {
                       <div className="flex items-center space-x-4">
                         <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
                           {item.product?.image_url ? (
-                            <img 
-                              src={item.product.image_url} 
-                              alt={item.product.name}
-                              className="w-full h-full object-cover"
-                            />
+                            <Image 
+                            src={item.product.image_url} 
+                            alt={item.product.name}
+                            width={80}  
+                            height={80} 
+                            className="w-full h-full object-cover"
+/>
                           ) : (
                             <div className="w-full h-full flex items-center justify-center bg-gray-200">
                               <ShoppingCartIcon className="w-6 h-6 text-gray-400" />

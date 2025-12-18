@@ -164,9 +164,9 @@ export default function CartPage() {
           <div className='text-center py-16'>
             <FaShoppingCart className='mx-auto text-gray-400 text-6xl mb-4' />
             <h2 className='text-2xl font-semibold mb-2'>Your cart is empty</h2>
-            <p className='text-gray-600 mb-6'>Looks like you haven't added anything to your cart yet.</p>
+            <p className='text-gray-600 mb-6'>Looks like you haven&apos;t added anything to your cart yet.</p>
             <Link 
-              href='/products/all' 
+              href='/collections' 
               className='bg-black text-[#d8c7a8] px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg shadow-gray-500/50 active:scale-95 transition-transform duration-150'
             >
               Continue Shopping
@@ -262,7 +262,7 @@ export default function CartPage() {
                 </button>
                 
                 <Link 
-                  href='/products/all' 
+                  href='/collections' 
                   className='w-full mt-4 bg-black text-[#d8c7a8] py-3 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg shadow-gray-500/50 active:scale-95 transition-transform duration-150 flex items-center justify-center gap-2'
                 >
                   Continue Shopping
