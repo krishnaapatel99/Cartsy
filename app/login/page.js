@@ -1,6 +1,6 @@
 "use client";
-
-import { useState } from "react";
+export const dynamic = "force-dynamic";
+import { useState, useMemo } from "react";
 import { supabaseBrowser } from "@/lib/supabaseClient";
 import AuthLayout from "@/components/AuthLayout";
 
@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const supabase = supabaseBrowser();
+  const supabase = useMemo(() => supabaseBrowser(), []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
