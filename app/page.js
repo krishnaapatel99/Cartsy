@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 import Image from "next/image";
 import { useLayoutEffect, useRef, useEffect } from "react";
 import SmoothScroll from "@/lib/SmoothScroll";
