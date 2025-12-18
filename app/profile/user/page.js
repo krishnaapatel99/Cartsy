@@ -1,6 +1,6 @@
 // app/profile/user/page.js
 "use client";
-
+export const dynamic = "force-dynamic";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FiEdit } from 'react-icons/fi';
