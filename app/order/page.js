@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Navbar from "@/components/Navbar";
-
+import Link from 'next/link';
 import { format } from 'date-fns';
 import Image from 'next/image';
 
@@ -136,14 +136,14 @@ export default function OrderPage() {
               />
             </svg>
             <h3 className="mt-2 text-lg font-medium text-gray-900">No orders yet</h3>
-            <p className="mt-1 text-gray-500">You haven't placed any orders yet.</p>
+            <p className="mt-1 text-gray-500">You haven&apos;t placed any orders yet.</p>
             <div className="mt-6">
-              <a
-                href="/"
+              <Link
+                href={"/collections"}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Continue Shopping
-              </a>
+              </Link>
             </div>
           </div>
         ) : (
