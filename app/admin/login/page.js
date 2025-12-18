@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabaseClient";
@@ -10,7 +10,8 @@ import { FiLock, FiMail } from "react-icons/fi";
 
 export default function AdminLogin() {
 
-  const supabase = supabaseBrowser();
+    const supabase = useMemo(() => supabaseBrowser(), []);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
