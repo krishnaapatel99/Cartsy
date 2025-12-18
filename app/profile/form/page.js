@@ -60,7 +60,7 @@ export default function ProfileForm() {
 
       setSuccess(true);
       setTimeout(() => {
-        router.push('/profile/user');
+        router.push('/profile/profilecreated');
       }, 1500);
     } catch (err) {
       setError(err.message);
