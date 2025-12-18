@@ -162,11 +162,11 @@ export default function Home() {
 
         {/* Fade-In Section */}
         <section className="w-screen">
-          <div ref={welcomeRef} className="text-black text-4xl font-semibold m-10 w-screen ">
-            <span className="text-gray-400 text-3xl py-8 block stagger-line">
+          <div ref={welcomeRef} className="text-black text-4xl font-semibold m-10 w-screen font-sans ">
+            <span className="text-gray-600 text-3xl py-8 block stagger-line">
               Welcome to CARTSY
             </span>
-            <p className="py-6 leading-tight font-stretch-extra-expanded">
+            <p className="py-6 leading-tight font-stretch-condensed">
               <span className="stagger-line block">
               We&apos;re a consumer-centric brand partner that
 

@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -101,12 +102,12 @@ function HomeCard() {
   }, { scope: cardRef });
 
   const CARD_DATA = [
-    { id: 1, imageUrl: "/sofa.png", title: "Modern Furniture Collection", description: "Sleek and functional designs for contemporary living spaces." },
-    { id: 2, imageUrl: "/home essentials.png", title: "Essential Home Goods", description: "Everything you need to make your house a home." },
-    { id: 3, imageUrl: "/jean.png", title: "Premium Denim Apparel", description: "Durable and stylish jeans for every occasion and fit." },
-    { id: 4, imageUrl: "/shirt.png", title: "Trendy Shirt Collection", description: "From casual tees to formal shirts, find your perfect top." },
-    { id: 5, imageUrl: "/sneaker.png", title: "Stylish Sneakers & Kicks", description: "Step up your game with our latest sneaker drops." },
-    { id: 6, imageUrl: "/purses.png", title: "Versatile Carry Bags", description: "Functional and fashionable bags for all your essentials." },
+    { id: 1, imageUrl: "/sofa.png",slug: "furniture", title: "Modern Furniture Collection", description: "Sleek and functional designs for contemporary living spaces." },
+    { id: 2, imageUrl: "/home essentials.png",slug:"essential home goods", title: "Essential Home Goods", description: "Everything you need to make your house a home." },
+    { id: 3, imageUrl: "/jean.png", slug:"jeans", title: "Premium Denim Apparel", description: "Durable and stylish jeans for every occasion and fit." },
+    { id: 4, imageUrl: "/shirt.png", slug:"shirts", title: "Trendy Shirt Collection", description: "From casual tees to formal shirts, find your perfect top." },
+    { id: 5, imageUrl: "/sneaker.png",slug:"shoes/sneakers", title: "Stylish Sneakers & Kicks", description: "Step up your game with our latest sneaker drops." },
+    { id: 6, imageUrl: "/purses.png",slug:"bags/purses", title: "Versatile Carry Bags", description: "Functional and fashionable bags for all your essentials." },
   ];
 
   return (
@@ -118,10 +119,15 @@ function HomeCard() {
 
         <div className="flex flex-wrap justify-between gap-y-10 p-6 max-w-7xl mx-auto">
           {CARD_DATA.map((item) => (
+          
             <div
               key={item.id}
               className="bg-[#E5E5DD] border border-[#DADAD0] rounded-3xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:scale-[1.02] transition-all duration-300 overflow-hidden w-full sm:w-[45%] lg:w-[30%]"
             >
+               <Link
+           key={item.id}
+           href={`/products/${item.slug}`}
+           >
               <div className="relative w-full h-64 sm:h-72">
                 <Image
                   src={item.imageUrl}
@@ -137,7 +143,10 @@ function HomeCard() {
                 <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
                 <p className="text-sm text-[#4B4B48]">{item.description}</p>
               </div>
+               </Link>
+              
             </div>
+          
           ))}
         </div>
       </div>

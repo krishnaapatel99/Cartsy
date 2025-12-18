@@ -6,14 +6,40 @@ import { SiWish } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
 import gsap from "gsap";
+import { supabaseBrowser } from "@/lib/supabaseClient";
+
+
 
 export default function Navbar() {
+  const supabase= supabaseBrowser();
   const navbarRef = useRef(null);
   const hasAnimated = useRef(false); 
+  const [user, setUser] = useState(null); 
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("Loading...");
 
-  
+   useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUser(user); 
+    };
+
+    getUser();
+
+    // listen for login/logout
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -120,7 +146,7 @@ export default function Navbar() {
         <span className="font-bold">EN</span>
     </div>
        
-        <div className="group flex flex-col justify-center items-center pr-6  text-[35px] leading-[0.85] tracking-tighter">
+        <div className="group flex flex-col justify-center items-center pr-3  text-[35px] leading-[0.85] tracking-tighter">
           <h1 className="font-sans text-hover-texture cursor-pointer italic font-extrabold group-hover:texture-animate">
             URBAN
           </h1>
@@ -129,25 +155,30 @@ export default function Navbar() {
           </h1>
         </div>
 
-        <div className="flex items-center justify-between gap-16 text-lg pl-2">
+        <div className="flex items-center justify-between gap-10 text-[16px] pl-2 font-sans font-semibold tracking-tight">
        
-       <Link href="/cart"> <div className="flex font-mono justify-center items-center text-black hover:scale-110 duration-300">
-          <span className="duration-300 p-2 cursor-pointer font-bold">Cart</span>
-          <FaShoppingCart className="cursor-pointer font-bold" />
+       <Link href="/cart"> <div className="flex justify-center items-center text-black hover:scale-110 duration-300">
+          <span className="duration-300 p-2 cursor-pointer ">Cart</span>
+          <FaShoppingCart className="cursor-pointer " />
         </div>
         </Link>
-        <Link href="/wishlist"><div className="flex justify-center items-center text-black hover:scale-110 duration-300 font-bold cursor-pointer font-mono">
+        <Link href="/collections"> <div className="flex  justify-center items-center text-black hover:scale-110 duration-300">
+          <span className="duration-300 p-2 cursor-pointer ">Collections</span>
+          <FaShoppingCart className="cursor-pointer " />
+        </div>
+        </Link>
+        <Link href="/wishlist"><div className="flex   justify-center items-center text-black hover:scale-110 duration-300  cursor-pointer ">
           <span className="duration-300 p-2">Wishlist</span>
           <SiWish />
         </div>
         </Link>
         
         <Link
-          href="/login"
-          className="flex  justify-center items-center text-black hover:scale-110 duration-300 font-bold cursor-pointer font-mono"
+          href={user ? "/user" : "/login"}
+          className="flex  justify-center items-center text-black hover:scale-110 duration-300  cursor-pointer "
         >
           <span className="py-2 pr-2">Profile</span>
-          <CgProfile className="text-xl" />
+          <CgProfile  />
         </Link>
         </div>
       </div>

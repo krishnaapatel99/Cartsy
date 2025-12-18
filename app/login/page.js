@@ -1,67 +1,83 @@
-// pages/auth/login.jsx
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
+import { supabaseBrowser } from "@/lib/supabaseClient";
 import AuthLayout from "@/components/AuthLayout";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const supabase = supabaseBrowser();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/confirm`,
+        },
+      });
+
+      if (error) {
+        setMessage(error.message);
+      } else {
+        setMessage("Magic link sent to your email ✉️");
+        setEmail("");
+      }
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-   <div className="h-screen flex justify-center items-center bg-[#E5E5DD]">
-   <div className="h-[80vh] rounded-xl">
-      <AuthLayout>
-      <h2 className="text-2xl font-semibold text-center mb-2">WELCOME BACK!</h2>
-      <p className="text-gray-500 text-center mb-6">
-        Access your personal account by logging in.
-      </p>
-
-      <div className="flex justify-center mb-6">
-        <Link
-          href="/login"
-          className="px-6 py-2 bg-black text-white rounded-l-md"
-        >
-          Log In
-        </Link>
-        <Link
-          href="/register"
-          className="px-6 py-2 bg-gray-100 text-gray-700 rounded-r-md"
-        >
-          Sign Up
-        </Link>
-      </div>
-
-      <form className="space-y-4">
-        <div>
-          <label className="text-sm font-medium">Email Address</label>
-          <input
-            type="email"
-            className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:ring-2 focus:ring-black"
-            placeholder="Enter your email"
-          />
-        </div>
-
-        <div>
-          <label className="text-sm font-medium">Password</label>
-          <input
-            type="password"
-            className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:ring-2 focus:ring-black"
-            placeholder="Enter your password"
-          />
-          <p className="text-right text-sm text-gray-500 mt-2 cursor-pointer">
-            Forgot Password?
+    <div className="h-screen flex justify-center items-center bg-[#E5E5DD]">
+      <div className="h-[80vh] rounded-xl">
+        <AuthLayout>
+          <h2 className="text-2xl font-semibold text-center mb-2">WELCOME BACK!</h2>
+          <p className="text-gray-500 text-center mb-6">
+            Enter your email to receive a magic link
           </p>
-        </div>
 
-        <button className="w-full bg-black text-white rounded-md py-3">
-          Log In
-        </button>
-      </form>
+          {message && (
+            <div className={`mb-4 p-3 rounded-md ${
+              message.includes("✉️") 
+                ? "bg-green-100 text-green-700 border border-green-300" 
+                : "bg-red-100 text-red-700 border border-red-300"
+            }`}>
+              {message}
+            </div>
+          )}
 
-      <p className="text-center text-sm mt-6">
-        Don’t have an account?{" "}
-        <Link href="/register" className="text-black font-semibold">
-          Sign up
-        </Link>
-      </p>
-    </AuthLayout>
-   </div>
-   </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:ring-2 focus:ring-black"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <button 
+              type="submit"
+              disabled={loading}
+              className="w-full bg-black text-white rounded-md py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Sending...' : 'Send Magic Link'}
+            </button>
+          </form>
+        </AuthLayout>
+      </div>
+    </div>
   );
 }

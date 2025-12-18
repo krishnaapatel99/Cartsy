@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -153,7 +154,8 @@ function Gadgets() {
           }}
         
         >
-          <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+         <Link
+         href={`/product/headphones`}> <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
             <Image
               src="/wireless.png"
               alt="headphones"
@@ -161,8 +163,9 @@ function Gadgets() {
               height={230}
               className="rounded-xl"
             />
-          </div>
-          <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+          </div></Link>
+          <Link
+          href={`/product/smartwatches`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
             <Image
               src="/smartwatches.png"
               alt="smartwatches"
@@ -170,8 +173,9 @@ function Gadgets() {
               height={230}
               className="rounded-xl"
             />
-          </div>
-          <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+          </div></Link>
+          <Link
+          href={`/product/neckbands`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
             <Image
               src="/neckband.png"
               alt="neckband"
@@ -179,8 +183,9 @@ function Gadgets() {
               height={230}
               className="rounded-2xl"
             />
-          </div>
-          <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+          </div></Link>
+          <Link
+          href={`/product/earbuds`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
             <Image
               src="/earbuds.png"
               alt="earbuds"
@@ -188,10 +193,12 @@ function Gadgets() {
               height={230}
               className="rounded-xl"
             />
-          </div>
+          </div></Link>
         </div>
 
         
+        <Link
+        href={`/product/mobile-phones`}>
         <div
           ref={rightRef}
           className="h-[75vh] w-[55vw] bg-[#B9B9B3] ml-6 mt-5 mb-10 rounded-xl"
@@ -207,7 +214,7 @@ function Gadgets() {
             height={330}
             className="rounded-xl"
           />
-        </div>
+        </div></Link>
       </div>
     </div>
   );
