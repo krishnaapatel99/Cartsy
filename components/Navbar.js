@@ -148,14 +148,14 @@ export default function Navbar() {
         <span className="font-bold">EN</span>
     </div>
        
-        <div className="group flex flex-col justify-center items-center pr-3  text-[35px] leading-[0.85] tracking-tighter">
+     <Link href="/">   <div className="group flex flex-col justify-center items-center pr-3  text-[35px] leading-[0.85] tracking-tighter">
           <h1 className="font-sans text-hover-texture cursor-pointer italic font-extrabold group-hover:texture-animate">
             URBAN
           </h1>
           <h1 className="font-sans text-hover-texture cursor-pointer italic font-extrabold -ml-[5px] group-hover:texture-animate">
             CARTZ
           </h1>
-        </div>
+        </div></Link>
 
         <div className="flex items-center justify-between gap-10 text-[16px] pl-2 font-sans font-semibold tracking-tight">
        
