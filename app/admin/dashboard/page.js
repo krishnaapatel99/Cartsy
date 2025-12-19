@@ -1,9 +1,20 @@
 "use client";
+export const dynamic = "force-dynamic";
+import Navbar from "@/components/Navbar";
+import { useEffect } from "react";
+
 
 export default function AdminDashboard() {
+useEffect(() => {
+    window.__navbarAlreadyFired = true;
+    window.dispatchEvent(new Event('navbarReveal'));
 
+  }, []);
   // ADD PRODUCT
   async function handleAdd() {
+
+
+
     const res = await fetch("/api/admin/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -55,38 +66,83 @@ export default function AdminDashboard() {
     alert(res.ok ? "Product Deleted" : data.error);
   }
 
-  return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-      <div className="grid gap-8 w-full max-w-xl px-6">
+return (
+    <>
+      <Navbar />
 
-        {/* ADD PRODUCT */}
-        <button
-          onClick={handleAdd}
-          className="flex items-center justify-center gap-4 h-24 rounded-2xl bg-black text-white text-2xl font-semibold shadow-lg hover:scale-[1.02] transition"
-        >
-          <span className="text-3xl">＋</span>
-          Add Product
-        </button>
+      <div className="min-h-screen bg-[#E5E5DD] px-6 py-10">
+        <div className="max-w-6xl mx-auto">
 
-        {/* UPDATE PRODUCT */}
-        <button
-          onClick={handleUpdate}
-          className="flex items-center justify-center gap-4 h-24 rounded-2xl bg-[#1f2937] text-white text-2xl font-semibold shadow-lg hover:scale-[1.02] transition"
-        >
-          <span className="text-3xl">✎</span>
-          Update Product
-        </button>
+          {/* Header */}
+          <div className="mb-10 text-center">
+            <h1 className="text-4xl font-bold text-gray-900">
+              Admin Dashboard
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Manage products and store operations
+            </p>
+          </div>
 
-        {/* DELETE PRODUCT */}
-        <button
-          onClick={handleDelete}
-          className="flex items-center justify-center gap-4 h-24 rounded-2xl bg-red-600 text-white text-2xl font-semibold shadow-lg hover:scale-[1.02] transition"
-        >
-          <span className="text-3xl">🗑</span>
-          Delete Product
-        </button>
+          {/* Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
+            {/* ADD */}
+            <button
+              onClick={handleAdd}
+              className="group p-8 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all border border-gray-200"
+            >
+              <div className="flex flex-col items-center gap-4">
+                <span className="text-5xl text-blue-600 group-hover:scale-110 transition">
+                  ＋
+                </span>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Add Product
+                </h2>
+                <p className="text-sm text-gray-500 text-center">
+                  Create and publish new products
+                </p>
+              </div>
+            </button>
+
+            {/* UPDATE */}
+            <button
+              onClick={handleUpdate}
+              className="group p-8 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all border border-gray-200"
+            >
+              <div className="flex flex-col items-center gap-4">
+                <span className="text-5xl text-green-600 group-hover:scale-110 transition">
+                  ✎
+                </span>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Update Product
+                </h2>
+                <p className="text-sm text-gray-500 text-center">
+                  Edit existing product details
+                </p>
+              </div>
+            </button>
+
+            {/* DELETE */}
+            <button
+              onClick={handleDelete}
+              className="group p-8 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all border border-gray-200"
+            >
+              <div className="flex flex-col items-center gap-4">
+                <span className="text-5xl text-red-600 group-hover:scale-110 transition">
+                  🗑
+                </span>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Delete Product
+                </h2>
+                <p className="text-sm text-gray-500 text-center">
+                  Remove products from the store
+                </p>
+              </div>
+            </button>
+
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
