@@ -84,12 +84,24 @@ export default function WishlistPage() {
           throw new Error('Failed to fetch wishlist');
         }
         
-        const data = await response.json();
+        const result = await response.json();
+        
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        
+        // Transform the API response to match the expected format
+        const items = result.data?.map(item => ({
+          ...item.products,
+          wishlistId: item.id
+        })) || [];
+        
         setWishlist({
-          ...data.wishlist,
-          items: data.items || []
+          items
         });
+      
       } catch (err) {
+        console.error('Error fetching wishlist:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -203,10 +215,10 @@ export default function WishlistPage() {
                     className='wishlist-item bg-white rounded-2xl shadow-lg p-6 flex flex-col'
                   >
                     <div className='w-full h-64 relative mb-4'>
-                      {item.products?.image_url ? (
+                      {item?.image_url ? (
                         <Image
-                          src={item.products.image_url}
-                          alt={item.products.name || 'Product'}
+                          src={item.image_url}
+                          alt={item.name || 'Product'}
                           fill
                           className='object-contain rounded-lg'
                         />
@@ -218,9 +230,9 @@ export default function WishlistPage() {
                     </div>
                     
                     <div className='flex-grow'>
-                      <h3 className='text-xl font-semibold mb-2'>{item.products?.name || 'Product Name'}</h3>
-                      <p className='text-gray-600 mb-2 line-clamp-2'>{item.products?.description || 'No description available'}</p>
-                      <p className='text-lg font-bold text-pink-500 mb-4'>${item.products?.price?.toFixed(2) || '0.00'}</p>
+                      <h3 className='text-xl font-semibold mb-2'>{item?.name || 'Product Name'}</h3>
+                      <p className='text-gray-600 mb-2 line-clamp-2'>{item?.description || 'No description available'}</p>
+                      <p className='text-lg font-bold text-black mb-4'>${item?.price?.toFixed(2) || '0.00'}</p>
                       
                       <div className='flex flex-col sm:flex-row gap-3 mt-4'>
                         <button 

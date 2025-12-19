@@ -83,8 +83,6 @@ export default function Home() {
     if (window.__textRevealAlreadyFired) {
       window.dispatchEvent(new Event("textReveal"));
     }
-  
-    // Reset flag when leaving Home page — so animation can run again on return
     return () => {
       window.__textRevealAlreadyFired = false;
     };
