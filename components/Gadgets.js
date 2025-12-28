@@ -155,7 +155,7 @@ function Gadgets() {
         
         >
          <Link
-         href={`/product/headphones`}> <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+         href={`/collection-not-available`}> <div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
             <Image
               src="/wireless.png"
               alt="headphones"
@@ -165,7 +165,7 @@ function Gadgets() {
             />
           </div></Link>
           <Link
-          href={`/product/smartwatches`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+          href={`/collection-not-available`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
             <Image
               src="/smartwatches.png"
               alt="smartwatches"
@@ -175,7 +175,7 @@ function Gadgets() {
             />
           </div></Link>
           <Link
-          href={`/product/neckbands`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+          href={`/collection-not-available`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
             <Image
               src="/neckband.png"
               alt="neckband"
@@ -185,7 +185,7 @@ function Gadgets() {
             />
           </div></Link>
           <Link
-          href={`/product/earbuds`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
+          href={`/collection-not-available`}><div className="w-[15vw] m-6 h-[30vh] rounded-xl z-14 shadow-2xl shadow-black bg-[#ABABA1]">
             <Image
               src="/earbuds.png"
               alt="earbuds"
@@ -198,7 +198,7 @@ function Gadgets() {
 
         
         <Link
-        href={`/product/mobile-phones`}>
+        href={`/collection-not-available`}>
         <div
           ref={rightRef}
           className="h-[75vh] w-[55vw] bg-[#B9B9B3] ml-6 mt-5 mb-10 rounded-xl"
