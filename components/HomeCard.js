@@ -1,32 +1,51 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+
 gsap.registerPlugin(ScrollTrigger);
 
 function HomeCard() {
   const cardRef = useRef(null);
   const contentRef = useRef(null);
   const moveTween = useRef(null);
-  
-  const moveListener = useRef(null); 
-
-  
+  const allowMove = useRef(true);
+  const [isMotionEnabled, setIsMotionEnabled] = useState(false);
 
   useGSAP(() => {
     const card = cardRef.current;
     const content = contentRef.current;
 
-   
-    const moveCardWithCursor = (e) => {
-      const currentScale = gsap.getProperty(card, "scale");
+    const handleOrientation = (e) => {
+      if (!allowMove.current) return;
       
+      const tiltX = e.gamma; // Left/Right tilt
+      const threshold = 30;
+      
+      // Calculate target position
+      let targetX = gsap.utils.mapRange(-threshold, threshold, -100, 100, tiltX);
+      
+      // If tilted past threshold, apply a "Back" ease for the bounce effect
+      const extremeTilt = Math.abs(tiltX) > threshold;
+
+      moveTween.current = gsap.to(card, {
+        x: targetX,
+        rotationZ: targetX * 0.03, // Subtle tilt rotation
+        duration: extremeTilt ? 0.5 : 1,
+        ease: extremeTilt ? "back.out(1.7)" : "power2.out",
+        overwrite: "auto",
+      });
+    };
+
+    const moveCardWithCursor = (e) => {
+      if (!allowMove.current || isMotionEnabled) return;
+      const currentScale = gsap.getProperty(card, "scale");
       if (currentScale <= 0.25) {
         moveTween.current = gsap.to(card, {
-          x: (e.clientX - window.innerWidth / 2) * 0.5,
+          x: (e.clientX - window.innerWidth / 2) * 0.4,
           duration: 1,
           ease: "power2.out",
           overwrite: "auto",
@@ -34,119 +53,107 @@ function HomeCard() {
       }
     };
 
-  
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: card,
         start: "top 50%",
         scrub: true,
-        markers: false,
         onUpdate: (self) => {
-        
           if (self.progress > 0.05) {
-       
+            allowMove.current = false;
             if (moveTween.current) moveTween.current.kill();
-            if (moveListener.current) {
-              window.removeEventListener("mousemove", moveListener.current);
-              moveListener.current = null;
-             
-              gsap.to(card, { x: 0, duration: 0.5, ease: "power1.out" });
-            }
+            gsap.to(card, { x: 0, rotationZ: 0, duration: 0.5 });
           } else {
-           
-            if (!moveListener.current) {
-              window.addEventListener("mousemove", moveCardWithCursor);
-              moveListener.current = moveCardWithCursor;
-            }
+            allowMove.current = true;
           }
         },
       },
     });
 
-   
-    tl.fromTo(
-      card,
-      { y: -470, scale: 0.2, transformOrigin: "center top" },
-      { y: -250, scale: 0.2, ease: "none" }
-    );
-
-  
-    tl.to(card, {
-      y: 2,
-      scale: 1,
-      x: 0, 
+    // Initial Animations
+    const isMobile = window.innerWidth < 640;
+    tl.fromTo(card, 
+      { y: isMobile ? -250 : -450, scale: 0.2, transformOrigin: "center top" },
+      { y: isMobile ? -130 : -250, scale: 0.2, ease: "none" }
+    ).to(card, {
+      y: isMobile ? 18 : 2,
+      scale: isMobile ? 0.9 : 1,
+      x: 0,
       ease: "sine.inOut",
     });
 
-    
-    tl.fromTo(
-      content,
-      { opacity: 0 },
-      { opacity: 1, ease: "bounce.out" },
-      "=0.4"
-    );
+    tl.fromTo(content, { opacity: 0 }, { opacity: 1 }, "=0.4");
 
-
-    window.addEventListener("mousemove", moveCardWithCursor);
-    moveListener.current = moveCardWithCursor;
-
-
-    gsap.set(card, { x: 0 });
-
-   
-    return () => {
-        window.removeEventListener("mousemove", moveCardWithCursor);
-        if (moveTween.current) moveTween.current.kill();
+    window.addEventListener("pointermove", moveCardWithCursor);
+    if (isMotionEnabled) {
+      window.addEventListener("deviceorientation", handleOrientation);
     }
-    
-  }, { scope: cardRef });
+
+    return () => {
+      window.removeEventListener("pointermove", moveCardWithCursor);
+      window.removeEventListener("deviceorientation", handleOrientation);
+    };
+  }, { scope: cardRef, dependencies: [isMotionEnabled] });
+
+  const enableMotion = async () => {
+    if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+      const res = await DeviceOrientationEvent.requestPermission();
+      if (res === "granted") setIsMotionEnabled(true);
+    } else {
+      setIsMotionEnabled(true);
+    }
+  };
 
   const CARD_DATA = [
-    { id: 1, imageUrl: "/sofa.png",slug: "furniture", title: "Modern Furniture Collection", description: "Sleek and functional designs for contemporary living spaces." },
-    { id: 2, imageUrl: "/home essentials.png",slug:"essential home goods", title: "Essential Home Goods", description: "Everything you need to make your house a home." },
-    { id: 3, imageUrl: "/jean.png", slug:"jeans", title: "Premium Denim Apparel", description: "Durable and stylish jeans for every occasion and fit." },
-    { id: 4, imageUrl: "/shirt.png", slug:"shirts", title: "Trendy Shirt Collection", description: "From casual tees to formal shirts, find your perfect top." },
-    { id: 5, imageUrl: "/sneaker.png",slug:"shoes/sneakers", title: "Stylish Sneakers & Kicks", description: "Step up your game with our latest sneaker drops." },
-    { id: 6, imageUrl: "/purses.png",slug:"bags/purses", title: "Versatile Carry Bags", description: "Functional and fashionable bags for all your essentials." },
+    { id: 1, imageUrl: "/sofa.png", slug: "furniture", title: "Modern Furniture" },
+    { id: 2, imageUrl: "/home essentials.png", slug: "essentials", title: "Home Goods" },
+    { id: 3, imageUrl: "/jean.png", slug: "jeans", title: "Denim Apparel" },
+    { id: 4, imageUrl: "/shirt.png", slug: "shirts", title: "Trendy Shirts" },
+    { id: 5, imageUrl: "/sneaker.png", slug: "sneakers", title: "Stylish Kicks" },
+    { id: 6, imageUrl: "/purses.png", slug: "purses", title: "Carry Bags" },
   ];
 
   return (
-    <div ref={cardRef} className="bg-[#A7A79D] m-10 rounded-2xl py-10">
+    <div ref={cardRef} className="touch-none bg-[#A7A79D] mx-4 my-6 sm:m-10 rounded-2xl pt-3 pb-6 relative overflow-hidden">
+      {!isMotionEnabled && (
+        <button 
+          onClick={enableMotion}
+          className="absolute top-4 right-4 z-50 bg-black text-white text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full sm:hidden active:scale-95 transition-transform"
+        >
+          Enable 3D Tilt
+        </button>
+      )}
+
       <div ref={contentRef}>
-        <h2 className="text-black px-6 text-4xl sm:text-6xl lg:text-[80px] font-extrabold text-center sm:text-left">
+        <h2 className="text-black px-6 text-4xl sm:text-6xl font-extrabold text-center sm:text-left mb-4">
           Discover Your Items
         </h2>
 
-        <div className="flex flex-wrap justify-between gap-y-10 p-6 max-w-7xl mx-auto">
-          {CARD_DATA.map((item) => (
-          
-            <div
-              key={item.id}
-              className="bg-[#E5E5DD] border border-[#DADAD0] rounded-3xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:scale-[1.02] transition-all duration-300 overflow-hidden w-full sm:w-[45%] lg:w-[30%]"
-            >
-               <Link
-           key={item.id}
-           href={`/products/${item.slug}`}
-           >
-              <div className="relative w-full h-64 sm:h-72">
-                <Image
-                  src={item.imageUrl}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  priority={item.id === 1}
-                />
-              </div>
-
-              <div className="p-5 text-[#2E2E2B]">
-                <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
-                <p className="text-sm text-[#4B4B48]">{item.description}</p>
-              </div>
-               </Link>
-              
+        {/* Mobile Horizontal Scroll */}
+        <div className="sm:hidden w-full px-3">
+          <div className="overflow-x-auto pb-3 -mx-3 px-3">
+            <div className="flex gap-3 w-max">
+              {CARD_DATA.map((item) => (
+                <Link href={`/products/${item.slug}`} key={`m-${item.id}`} className="bg-[#E5E5DD] rounded-xl overflow-hidden w-48 shadow-lg">
+                    <div className="relative w-full h-32">
+                      <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
+                    </div>
+                    <div className="p-3 text-center text-xs font-bold text-gray-800 uppercase">{item.title}</div>
+                </Link>
+              ))}
             </div>
-          
+          </div>
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden sm:flex flex-wrap justify-center gap-6 p-6 max-w-7xl mx-auto">
+          {CARD_DATA.map((item) => (
+            <Link href={`/products/${item.slug}`} key={item.id} className="w-[30%] bg-[#E5E5DD] rounded-3xl overflow-hidden hover:scale-105 transition-transform">
+                <div className="relative h-64 w-full">
+                  <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
+                </div>
+                <div className="p-4 text-center font-bold">{item.title}</div>
+            </Link>
           ))}
         </div>
       </div>

@@ -98,13 +98,13 @@ export default function Home() {
     <SmoothScroll>
       <div className="bg-[#E5E5DD] min-h-screen w-screen">
         <section className="font-['Inter'] w-screen overflow-visible">
-          <Navbar />
-          <div className="text-black text-4xl font-mono ml-10 mr-10 mb-10 relative flex justify-between items-start overflow-visible">
+          <Navbar className="md:mb-0 -mb-4" />
+          <div className="text-black text-2xl sm:text-3xl md:text-4xl font-mono mx-4 sm:mx-6 md:ml-10 md:mr-10 mb-6 md:mb-10 relative flex flex-col md:flex-row justify-between items-start overflow-visible">
             <ImageTrailContainer />
 
                        
-            <div className="flex flex-col h-[73vh] justify-between relative z-[50]">                                                                            
-              <div className="p-6 pt-18">
+            <div className="hidden md:flex flex-col h-[60vh] lg:h-[73vh] justify-between relative z-[50]">                                                                            
+              <div className="p-4 sm:p-6 pt-12 sm:pt-18">
                 <span ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>
                   WEAR <span className="font-bold pt-4">TREND</span>
                 </span>
@@ -114,7 +114,7 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="w-[360px] pl-2 pr-2 pb-4" style={{ lineHeight: "0.5" }}>                                                                          
+              <div className="w-full max-w-[360px] pl-2 pr-2 pb-4 text-base sm:text-lg" style={{ lineHeight: "1.2" }}>                                                                          
                 <span className="text-lg text-gray-500" ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>    
                   Inspired by the cosmic wonders,
                   <br /> we curated a collection that
@@ -129,21 +129,20 @@ export default function Home() {
             <Landingimages />
 
             {/* RIGHT TEXT SECTION */}
-            <div className="flex flex-col h-[73vh] justify-between z-[50]">
-              <div className="flex flex-col m-2 pt-16" style={{ lineHeight: "0.3" }}>
-                <span className="pt-4" ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>
-                  NEW DIMENSION{" "}
-                </span>
-                <br />
-                <div className="flex items-center" ref={addToRefsUp}  style={{ opacity: 0, transform: "translateY(-50px)"}}>
-                  <span >
-                    TO <span className="pl-8">STYLE</span>
+            <div className="hidden md:flex flex-col h-[60vh] lg:h-[73vh] justify-between z-[50]">
+              <div className="m-2 pt-8 lg:pt-16" style={{ lineHeight: "0.8" }}>
+                <div ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>
+                  NEW DIMENSION
+                </div>
+                <div className="flex items-center" ref={addToRefsUp} style={{ opacity: 0, transform: "translateY(-50px)"}}>
+                  <span>
+                    TO <span className="pl-4">STYLE</span>
                   </span>
                   <span className="text-5xl pl-2 pt-2">👓</span>
                 </div>
               </div>
 
-              <div className="w-[350px] pl-2 pr-2 pb-4" style={{ lineHeight: "0.6" }}>
+              <div className="w-full max-w-[350px] pl-2 pr-2 pb-4 text-lg sm:text-xl" style={{ lineHeight: "1.3" }}>
                 <span className="text-xl text-gray-500" ref={addToRefsDown} style={{ opacity: 0, transform: "translateY(50px)", display: "inline-block" }}>
                 HERE, it&apos;s one small step for{" "}
 
@@ -154,18 +153,20 @@ export default function Home() {
             </div>
           </div>
 
-          <Scrollingtext />
+          <div className="mt-2 md:mt-0">
+            <Scrollingtext />
+          </div>
         </section>
 
-        <hr className="w-screen border-t-2 border-dotted h-8 text-black m-8" />
+        <hr className="w-screen border-t-2 border-dotted h-4 sm:h-6 md:h-8 text-black mt-2 sm:mt-3 md:mt-4 mb-4 sm:mb-6 md:mb-8" />
 
         {/* Fade-In Section */}
         <section className="w-screen">
-          <div ref={welcomeRef} className="text-black text-4xl font-semibold m-10 w-screen font-sans ">
-            <span className="text-gray-600 text-3xl py-8 block stagger-line">
-              Welcome to CARTSY
+          <div ref={welcomeRef} className="text-black text-2xl sm:text-3xl md:text-4xl font-semibold p-4 sm:p-6 md:m-10 w-full font-sans">
+            <span className="text-gray-600 text-xl sm:text-2xl md:text-3xl py-2 sm:py-4 md:py-6 block stagger-line">
+              Welcome to CARTZ
             </span>
-            <p className="py-6 leading-tight font-stretch-condensed">
+            <p className="py-3 sm:py-4 md:py-6 leading-normal sm:leading-tight font-stretch-condensed text-lg sm:text-xl md:text-2xl">
               <span className="stagger-line block">
               We&apos;re a consumer-centric brand partner that
 
@@ -178,23 +179,23 @@ export default function Home() {
           </div>
 
           <HomeCard />
-          <h1 className="px-10 text-[80px] font-extrabold">Gadgets</h1>
+          <h1 className="px-4 sm:px-6 md:px-10 text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-extrabold">Gadgets</h1>
           <Gadgets />
 
-          <div className="text-6xl mt-20 ml-10 text-black font-bold flex justify-between w-[90%]" ref={dealsCardRef}>
+          <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-10 sm:mt-16 md:mt-20 mx-4 sm:mx-6 md:ml-10 text-black font-bold flex justify-between w-[calc(100%-2rem)] sm:w-[95%] md:w-[90%]" ref={dealsCardRef}>
             <p>Top Deals and Discounts</p>
             <IoIosArrowDroprightCircle className="cursor-pointer active:scale-50 duration-200" />
           </div>
 
-          <div className="flex bg-[#afafa7] mt-14 mb-10">
+          <div className="flex bg-[#afafa7] mt-8 sm:mt-12 md:mt-14 mb-6 sm:mb-8 md:mb-10">
             <DealsCards />
           </div>
 
           <div ref={text2Ref}>
-            <h2 className="text-black text-5xl pt-10 pb-2 font-bold text-center">
+            <h2 className="text-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl pt-6 sm:pt-8 md:pt-10 pb-2 font-bold text-center px-4">
               Premium clothing for every occasion
             </h2>
-            <p className="text-[#4B5563] text-2xl pb-10 text-center">
+            <p className="text-[#4B5563] text-base sm:text-lg md:text-xl lg:text-2xl pb-6 sm:pb-8 md:pb-10 text-center px-4">
               Collaboration with{" "}
               <span className="text-black font-bold">brands you love</span> around the world
             </p>
