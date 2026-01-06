@@ -184,7 +184,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile View */}
-      <div className="md:hidden flex justify-between items-center px-3 py-4 bg-[#E5E5DD] text-black">
+      <div className="md:hidden flex justify-between items-center px-3 py-6 bg-[#E5E5DD] text-black h-24">
         {/* Hamburger Menu Button */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}

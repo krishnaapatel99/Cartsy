@@ -13,7 +13,6 @@ function HomeCard() {
   const contentRef = useRef(null);
   const moveTween = useRef(null);
   const allowMove = useRef(true);
-  const [isMotionEnabled, setIsMotionEnabled] = useState(false);
 
   useGSAP(() => {
     const card = cardRef.current;
@@ -41,7 +40,7 @@ function HomeCard() {
     };
 
     const moveCardWithCursor = (e) => {
-      if (!allowMove.current || isMotionEnabled) return;
+      if (!allowMove.current) return;
       const currentScale = gsap.getProperty(card, "scale");
       if (currentScale <= 0.25) {
         moveTween.current = gsap.to(card, {
@@ -85,24 +84,13 @@ function HomeCard() {
     tl.fromTo(content, { opacity: 0 }, { opacity: 1 }, "=0.4");
 
     window.addEventListener("pointermove", moveCardWithCursor);
-    if (isMotionEnabled) {
-      window.addEventListener("deviceorientation", handleOrientation);
-    }
+    window.addEventListener("deviceorientation", handleOrientation);
 
     return () => {
       window.removeEventListener("pointermove", moveCardWithCursor);
       window.removeEventListener("deviceorientation", handleOrientation);
     };
-  }, { scope: cardRef, dependencies: [isMotionEnabled] });
-
-  const enableMotion = async () => {
-    if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
-      const res = await DeviceOrientationEvent.requestPermission();
-      if (res === "granted") setIsMotionEnabled(true);
-    } else {
-      setIsMotionEnabled(true);
-    }
-  };
+  }, { scope: cardRef });
 
   const CARD_DATA = [
     { id: 1, imageUrl: "/sofa.png", slug: "furniture", title: "Modern Furniture" },
@@ -115,15 +103,6 @@ function HomeCard() {
 
   return (
     <div ref={cardRef} className="touch-none bg-[#A7A79D] mx-4 my-6 sm:m-10 rounded-2xl pt-3 pb-6 relative overflow-hidden">
-      {!isMotionEnabled && (
-        <button 
-          onClick={enableMotion}
-          className="absolute top-4 right-4 z-50 bg-black text-white text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full sm:hidden active:scale-95 transition-transform"
-        >
-          Enable 3D Tilt
-        </button>
-      )}
-
       <div ref={contentRef}>
         <h2 className="text-black px-6 text-4xl sm:text-6xl font-extrabold text-center sm:text-left mb-4">
           Discover Your Items
