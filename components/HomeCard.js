@@ -94,11 +94,11 @@ function HomeCard() {
 
   const CARD_DATA = [
     { id: 1, imageUrl: "/sofa.png", slug: "furniture", title: "Modern Furniture" },
-    { id: 2, imageUrl: "/home essentials.png", slug: "essentials", title: "Home Goods" },
+    { id: 2, imageUrl: "/home essentials.png", slug: "essential-home-goods", title: "Home Goods" },
     { id: 3, imageUrl: "/jean.png", slug: "jeans", title: "Denim Apparel" },
     { id: 4, imageUrl: "/shirt.png", slug: "shirts", title: "Trendy Shirts" },
     { id: 5, imageUrl: "/sneaker.png", slug: "sneakers", title: "Stylish Kicks" },
-    { id: 6, imageUrl: "/purses.png", slug: "purses", title: "Carry Bags" },
+    { id: 6, imageUrl: "/purses.png", slug: "bags", title: "Carry Bags" },
   ];
 
   return (

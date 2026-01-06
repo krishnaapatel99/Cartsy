@@ -34,7 +34,7 @@ function ImageTrailContainer() {
         left: 0,
         width: "100%",
         height: "100%",
-        pointerEvents: "none",
+        pointerEvents: "auto",
         zIndex: 35,
         overflow: "hidden",
       }}

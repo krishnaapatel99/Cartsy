@@ -145,7 +145,7 @@ function Landingimages() {
          2. md:mx-0: Resets margin for desktop to respect your original layout.
          3. md:mr-12: Keeps your original desktop spacing.
       */
-      className="relative flex justify-center items-center h-[45vh] md:h-[65vh] w-[90%] md:w-[55vw] mx-auto md:mx-0 overflow-visible mt-28 md:mt-0 mb-18 md:mb-24 z-[50] md:mr-12"
+      className="relative flex justify-center items-center h-[45vh] md:h-[65vh] w-[90%] md:w-[55vw] mx-auto md:mx-0 overflow-visible mt-28 md:mt-0 mb-20 md:mb-24 z-[50] md:mr-12"
     >
       {/* Left Image */}
       <div className="photo photo-left absolute w-[130px] h-[170px] md:w-[240px] md:h-[300px] shadow-xl overflow-hidden cursor-pointer">
