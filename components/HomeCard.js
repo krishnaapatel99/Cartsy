@@ -72,7 +72,7 @@ function HomeCard() {
     // Initial Animations
     const isMobile = window.innerWidth < 640;
     tl.fromTo(card, 
-      { y: isMobile ? -250 : -450, scale: 0.2, transformOrigin: "center top" },
+      { y: isMobile ? -290 : -450, scale: 0.2, transformOrigin: "center top" },
       { y: isMobile ? -130 : -250, scale: 0.2, ease: "none" }
     ).to(card, {
       y: isMobile ? 18 : 2,

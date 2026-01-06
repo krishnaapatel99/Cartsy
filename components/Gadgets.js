@@ -122,7 +122,7 @@ function Gadgets() {
   ];
 
   return (
-    <div className="overflow-x-hidden w-full bg-[#BAB8B2] md:bg-transparent transition-colors duration-500">
+    <div className="overflow-x-hidden w-full ">
       {/* --- DESKTOP VIEW (MD and up) --- */}
       <div className="hidden md:flex p-10 justify-center">
         <div
