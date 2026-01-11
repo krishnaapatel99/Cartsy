@@ -161,7 +161,7 @@ export default function Navbar() {
               <FaShoppingCart className="cursor-pointer" />
             </div>
           </Link>
-          <Link href="/collections">
+          <Link href="/collection-not-available">
             <div className="flex justify-center items-center text-black hover:scale-110 duration-300">
               <span className="duration-300 p-2 cursor-pointer">Collections</span>
               <FaShoppingCart className="cursor-pointer" />
@@ -227,7 +227,7 @@ export default function Navbar() {
             Cart
           </Link>
           <Link
-            href="/collections"
+            href="/collection-not-available"
             className="flex items-center text-black py-2 px-4 hover:bg-gray-200 rounded-md transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
