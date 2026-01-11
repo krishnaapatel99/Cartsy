@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
@@ -18,40 +18,49 @@ function HomeCard() {
     const card = cardRef.current;
     const content = contentRef.current;
 
+    /* ------------------ MOBILE TILT (UNCHANGED) ------------------ */
     const handleOrientation = (e) => {
       if (!allowMove.current) return;
-      
+      if (window.innerWidth >= 640) return;
+
       const tiltX = e.gamma; // Left/Right tilt
       const threshold = 30;
-      
-      // Calculate target position
-      let targetX = gsap.utils.mapRange(-threshold, threshold, -100, 100, tiltX);
-      
-      // If tilted past threshold, apply a "Back" ease for the bounce effect
+
+      const targetX = gsap.utils.mapRange(
+        -threshold,
+        threshold,
+        -100,
+        100,
+        tiltX
+      );
+
       const extremeTilt = Math.abs(tiltX) > threshold;
 
       moveTween.current = gsap.to(card, {
         x: targetX,
-        rotationZ: targetX * 0.03, // Subtle tilt rotation
         duration: extremeTilt ? 0.5 : 1,
         ease: extremeTilt ? "back.out(1.7)" : "power2.out",
         overwrite: "auto",
       });
     };
 
+    /* ------------------ DESKTOP MOUSE FOLLOW ------------------ */
     const moveCardWithCursor = (e) => {
       if (!allowMove.current) return;
-      const currentScale = gsap.getProperty(card, "scale");
-      if (currentScale <= 0.25) {
-        moveTween.current = gsap.to(card, {
-          x: (e.clientX - window.innerWidth / 2) * 0.4,
-          duration: 1,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
-      }
+      if (window.innerWidth < 640) return;
+
+      const centerX = window.innerWidth / 2;
+      const moveX = (e.clientX - centerX) * 0.4;
+
+      moveTween.current = gsap.to(card, {
+        x: moveX,
+        duration: 1,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
     };
 
+    /* ------------------ SCROLL TRIGGER ------------------ */
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: card,
@@ -61,7 +70,7 @@ function HomeCard() {
           if (self.progress > 0.05) {
             allowMove.current = false;
             if (moveTween.current) moveTween.current.kill();
-            gsap.to(card, { x: 0, rotationZ: 0, duration: 0.5 });
+            gsap.to(card, { x: 0, duration: 0.5 });
           } else {
             allowMove.current = true;
           }
@@ -69,25 +78,28 @@ function HomeCard() {
       },
     });
 
-    // Initial Animations
+    /* ------------------ INITIAL ANIMATION ------------------ */
     const isMobile = window.innerWidth < 640;
-    tl.fromTo(card, 
+
+    tl.fromTo(
+      card,
       { y: isMobile ? -310 : -450, scale: 0.2, transformOrigin: "center top" },
       { y: isMobile ? -130 : -250, scale: 0.2, ease: "none" }
-    ).to(card, {
-      y: isMobile ? 18 : 2,
-      scale: isMobile ? 0.9 : 1,
-      x: 0,
-      ease: "sine.inOut",
-    });
+    )
+      .to(card, {
+        y: isMobile ? 18 : 2,
+        scale: isMobile ? 0.9 : 1,
+        x: 0,
+        ease: "sine.inOut",
+      })
+      .fromTo(content, { opacity: 0 }, { opacity: 1 }, "=0.4");
 
-    tl.fromTo(content, { opacity: 0 }, { opacity: 1 }, "=0.4");
-
-    window.addEventListener("pointermove", moveCardWithCursor);
+    /* ------------------ EVENTS ------------------ */
+    window.addEventListener("mousemove", moveCardWithCursor);
     window.addEventListener("deviceorientation", handleOrientation);
 
     return () => {
-      window.removeEventListener("pointermove", moveCardWithCursor);
+      window.removeEventListener("mousemove", moveCardWithCursor);
       window.removeEventListener("deviceorientation", handleOrientation);
     };
   }, { scope: cardRef });
@@ -102,7 +114,10 @@ function HomeCard() {
   ];
 
   return (
-    <div ref={cardRef} className="touch-none bg-[#A7A79D] mx-4 my-6 sm:m-10 rounded-2xl pt-3 pb-6 relative overflow-hidden">
+    <div
+      ref={cardRef}
+      className="touch-none bg-[#A7A79D] mx-4 my-6 sm:m-10 rounded-2xl pt-3 pb-6 relative overflow-hidden"
+    >
       <div ref={contentRef}>
         <h2 className="text-black px-6 text-4xl sm:text-6xl font-extrabold text-center sm:text-left mb-4">
           Discover Your Items
@@ -113,11 +128,22 @@ function HomeCard() {
           <div className="overflow-x-auto pb-3 -mx-3 px-3">
             <div className="flex gap-3 w-max">
               {CARD_DATA.map((item) => (
-                <Link href={`/products/${item.slug}`} key={`m-${item.id}`} className="bg-[#E5E5DD] rounded-xl overflow-hidden w-48 shadow-lg">
-                    <div className="relative w-full h-32">
-                      <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
-                    </div>
-                    <div className="p-3 text-center text-xs font-bold text-gray-800 uppercase">{item.title}</div>
+                <Link
+                  href={`/products/${item.slug}`}
+                  key={`m-${item.id}`}
+                  className="bg-[#E5E5DD] rounded-xl overflow-hidden w-48 shadow-lg"
+                >
+                  <div className="relative w-full h-32">
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-3 text-center text-xs font-bold text-gray-800 uppercase">
+                    {item.title}
+                  </div>
                 </Link>
               ))}
             </div>
@@ -127,11 +153,22 @@ function HomeCard() {
         {/* Desktop Grid */}
         <div className="hidden sm:flex flex-wrap justify-center gap-6 p-6 max-w-7xl mx-auto">
           {CARD_DATA.map((item) => (
-            <Link href={`/products/${item.slug}`} key={item.id} className="w-[30%] bg-[#E5E5DD] rounded-3xl overflow-hidden hover:scale-105 transition-transform">
-                <div className="relative h-64 w-full">
-                  <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
-                </div>
-                <div className="p-4 text-center font-bold">{item.title}</div>
+            <Link
+              href={`/products/${item.slug}`}
+              key={item.id}
+              className="w-[30%] bg-[#E5E5DD] rounded-3xl overflow-hidden hover:scale-105 transition-transform"
+            >
+              <div className="relative h-64 w-full">
+                <Image
+                  src={item.imageUrl}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-4 text-center font-bold">
+                {item.title}
+              </div>
             </Link>
           ))}
         </div>

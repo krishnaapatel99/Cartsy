@@ -1,7 +1,8 @@
 "use client";
 export const dynamic = "force-dynamic";
-import { useState, useMemo } from "react";
+import { useState, useMemo , useEffect} from "react";
 import { supabaseBrowser } from "@/lib/supabaseClient";
+import Navbar from "@/components/Navbar"
 import AuthLayout from "@/components/AuthLayout";
 
 export default function LoginPage() {
@@ -9,7 +10,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const supabase = useMemo(() => supabaseBrowser(), []);
-
+ useEffect(() => {
+    window.__navbarAlreadyFired = true;
+    window.dispatchEvent(new Event('navbarReveal'));
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -37,8 +41,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-[#E5E5DD]">
-      <div className="h-[80vh] rounded-xl">
+    <div className="h-screen flex flex-col items-center bg-[#E5E5DD]">
+      <Navbar/>
+      <div className="h-[80vh] rounded-xl mt-6">
         <AuthLayout>
           <h2 className="text-2xl font-semibold text-center mb-2">WELCOME BACK!</h2>
           <p className="text-gray-500 text-center mb-6">

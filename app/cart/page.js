@@ -75,26 +75,36 @@ export default function CartPage() {
   }, [cart.items]);
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/cart/fetch');
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch cart');
-        }
-        
-        const data = await response.json();
-        setCart({
-          ...data.cart,
-          items: data.items || []
-        });
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+   const fetchCart = async () => {
+  try {
+    setLoading(true);
+
+    const response = await fetch('/api/cart/fetch');
+
+    // 🔐 Handle unauthorized separately
+    if (response.status === 401) {
+      const errData = await response.json();
+      throw new Error(errData.error || 'Unauthorized');
+    }
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch cart');
+    }
+
+    const data = await response.json();
+
+    setCart({
+      ...data.cart,
+      items: data.items || []
+    });
+
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
     fetchCart();
   }, []);
@@ -140,12 +150,39 @@ export default function CartPage() {
   }
 
   if (error) {
+    // Check if the error is due to unauthenticated user
+    if (error.includes('Unauthorized') || error.includes('unauthorized')) {
+      return (
+        <div className="bg-[#E5E5DD] min-h-screen flex flex-col items-center justify-center p-4">
+          <div className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+            Please login first to view your cart
+          </div>
+          <p className="text-gray-600 mb-6 text-center">You need to be logged in to access your shopping cart.</p>
+          <div className="flex gap-4">
+            <Link 
+              href="/login" 
+              className="px-6 py-3 bg-black text-[#d8c7a8] rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg shadow-gray-500/50 active:scale-95 transition-transform duration-150"
+            >
+              Login
+            </Link>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+      );
+    }
+    
+    // For other errors, show the default error message
     return (
       <div className="bg-[#E5E5DD] min-h-screen flex flex-col items-center justify-center p-4">
         <div className="text-2xl font-semibold text-red-500 mb-4">Error: {error}</div>
         <button 
           onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          className="px-6 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors"
         >
           Try Again
         </button>
